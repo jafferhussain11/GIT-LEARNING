@@ -1,15 +1,21 @@
 
+
+
 const form = document.getElementById('addForm');
 const itemlist = document.getElementById('items'); //contains all list items.
-
+const filter = document.getElementById('filter');
+//adding events
 form.addEventListener('submit',additem);
-
+filter.addEventListener('keyup',searchMatch);
 itemlist.addEventListener('click', removelistitem);
+
+//functions
 function additem(e){
 
     e.preventDefault();
 
     const valuetoappend = document.getElementById('item').value;
+    const valuetoappend2 = document.getElementById('desc').value;
 
 
     //create new li element
@@ -18,6 +24,8 @@ function additem(e){
     //add text node with input value as text from form
 
     li.appendChild(document.createTextNode(valuetoappend));
+    li.appendChild(document.createTextNode(valuetoappend2));
+
     //itemlist.appendChild(li);
 
     //ADDDING BUTTON delete
@@ -45,17 +53,27 @@ function removelistitem(e){
     }
 }
 
+function searchMatch(e){
 
-//li list items in a new variable list
-const list = document.querySelectorAll('.list-group-item');
+    const filtext = e.target.value.toLowerCase(); //grabbin the input from seach box
 
-for(let i=0 ; i<list.length; i++){
+    const list = itemlist.getElementsByTagName('li');
+    //console.log(list);
+    
+    Array.from(list).forEach(function(item){
 
-    //create EDIT button 
-    const editbut = document.createElement('button');
-    editbut.className = 'btn btn-danger btn-sm float-right delete';
-    editbut.appendChild(document.createTextNode('Edit'));
-    list[i].appendChild(editbut);
-   
+        const itemName = item.firstChild.textContent;
+        const itemName2 =item.firstChild.nextSibling.textContent;
+        if(itemName.toLowerCase().indexOf(filtext) != -1 || itemName2.toLowerCase().indexOf(filtext) != -1){
+
+            item.style.display = 'block';
+
+        }else{
+
+            item.style.display = 'none';
+        }
+   }
+)
 
 }
+
